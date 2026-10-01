@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muhammad Rifan Al Azis – Portofolio</title>
+<meta name="description" content="Portofolio Muhammad Rifan Al Azis: pengembangan web dan Sistem Informasi Geografis.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231E6B66'/%3E%3Ctext x='16' y='22' font-size='17' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3ER%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="shell">
+  <aside>
+    <div>
+      <p class="brand" id="brand"></p>
+      <p class="muted" id="role"></p>
+      <nav aria-label="Navigasi utama">
+        <a href="#beranda">Beranda</a>
+        <a href="#tentang">Tentang</a>
+        <a href="#proyek">Proyek</a>
+        <a href="#keahlian">Keahlian</a>
+        <a href="#pengalaman">Pengalaman</a>
+        <a href="#kontak">Kontak</a>
+      </nav>
+    </div>
+    <p class="muted small">Diperbarui <span id="updated"></span></p>
+  </aside>
+
+  <main>
+    <section class="hero" id="beranda">
+      <svg class="contours" id="contours" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+      <div>
+        <h1 id="name"></h1>
+        <p class="lead" id="tagline"></p>
+        <p class="actions">
+          <a class="btn" href="#proyek">Lihat proyek</a>
+          <a class="btn ghost" href="#kontak">Hubungi saya</a>
+        </p>
+      </div>
+      <div class="arch" id="arch"></div>
+    </section>
+
+    <section id="tentang"><h2>Tentang</h2><div id="about" class="prose"></div></section>
+    <section id="proyek"><h2>Proyek</h2><div id="projects"></div></section>
+    <section id="keahlian"><h2>Keahlian</h2><div id="skills"></div></section>
+    <section id="pengalaman"><h2>Pengalaman</h2><div id="experience"></div></section>
+    <section id="kontak"><h2>Kontak</h2><div id="contact"></div></section>
+  </main>
+</div>
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
