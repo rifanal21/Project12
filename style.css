@@ -47,7 +47,7 @@ h1{font-size:clamp(2.6rem,6.2vw,5rem);line-height:1.02;font-weight:700;letter-sp
 
 .arch{aspect-ratio:3/4;border-radius:999px 999px 14px 14px;overflow:hidden;background:var(--line);
   display:grid;place-items:center;border:1px solid var(--line);box-shadow:0 0 0 8px var(--paper),0 0 0 9px var(--line)}
-.arch img{width:100%;height:100%;object-fit:cover;display:block}
+.arch img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;display:block}
 .arch span{font:700 4rem var(--sans);color:var(--muted)}
 
 .prose p+p{margin-top:1.1rem}
@@ -63,6 +63,15 @@ h1{font-size:clamp(2.6rem,6.2vw,5rem);line-height:1.02;font-weight:700;letter-sp
 .tag{font-size:.82rem;padding:.1rem .65rem;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
 .items{display:flex;flex-wrap:wrap;gap:.45rem}
 .items .tag{font-size:.95rem;padding:.2rem .8rem;color:var(--ink)}
+
+.videos{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:2.25rem 1.5rem;align-items:start}
+.frame{position:relative;display:block;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--line);border:1px solid var(--line)}
+.frame.v{aspect-ratio:9/16}
+.frame iframe,.frame video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+.frame.ext{display:grid;place-items:center;text-align:center;padding:1rem;text-decoration:none;font:600 1rem var(--sans);color:var(--ink)}
+.frame.ext:hover{border-color:var(--accent);color:var(--accent)}
+.vid h3{font-size:1.1rem;font-weight:700;margin-top:.85rem;letter-spacing:-.01em}
+.vid p{font-size:.95rem;margin-top:.2rem}
 
 .mail{font:700 clamp(1.4rem,3.6vw,2.4rem)/1.2 var(--sans);letter-spacing:-.02em;
   text-decoration-color:var(--accent);text-underline-offset:.2em;text-decoration-thickness:2px;word-break:break-all}
