@@ -43,13 +43,13 @@ const DATA = {
   videos: [
     {
       title: "Video 1",
-      desc: "Ganti dengan deskripsi video Anda.",
+      desc: "berikut adalah konten pertama saya.",
       url: "video/video1.mp4",
       vertical: false
     },
     {
       title: "Video 2",
-      desc: "Ganti dengan deskripsi video Anda.",
+      desc: "berikut adalah konten kedua saya.",
       url: "video/video2.mp4",
       vertical: true
     }
@@ -64,7 +64,7 @@ const DATA = {
 
   experience: [
     {
-      period: "2026 – sekarang",
+      period: "2026 – ",
       title: "Teman Circle",
       sub: "Konten Kreator",
       desc: "Membuat konten visual, foto produk, dan materi promosi untuk media sosial."
