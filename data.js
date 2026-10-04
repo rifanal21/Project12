@@ -13,8 +13,7 @@ const DATA = {
 
   about: [
     "Saya mahasiswa DIII Manajemen Informatika yang tertarik pada pengembangan web, pembuatan konten, dan desain visual. Saya suka mengubah ide dan data menjadi tampilan yang bisa dipahami orang dalam sekali lihat.",
-    "Saat ini saya juga terlibat di Grias Property, perusahaan properti dan arsitektur yang berfokus pada hunian tropis modern, tempat saya mengerjakan kebutuhan digitalnya."
-  ],
+    
 
   projects: [
     {
