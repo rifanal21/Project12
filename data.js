@@ -58,7 +58,7 @@ const DATA = {
   skills: [
     { group: "Web", items: ["HTML", "CSS", "JavaScript"] },
     { group: "Konten Kreator", items: ["Media sosial", "Pembuatan konten"] },
-    { group: "Editing Video", items: ["CapCut", "Premiere Pro"] },
+    { group: "Editing Video", items: ["CapCut"] },
     { group: "Desain Grafis", items: ["Canva", "Adobe Illustrator"] }
   ],
 
