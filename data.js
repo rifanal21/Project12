@@ -25,11 +25,11 @@ const DATA = {
       link: "" // isi alamat web jika sudah online
     },
     {
-      title: "Konten Kreator Kafe",
+      title: "Konten Kreator Cafe",
       year: "2026",
       desc: "Membuat konten visual, foto produk, dan materi promosi untuk media sosial sebuah kafe.",
       tags: ["Media Sosial", "Konten Kreator"],
-      link: ""
+      link: "#konten" // mengarah ke bagian Konten Video di bawah
     },
     {
       title: "Latihan Struktur Data dengan Bahasa C",
@@ -38,6 +38,27 @@ const DATA = {
       tags: ["C", "Struktur Data"],
       link: ""
     }
+  ],
+
+  /* Video karya Anda. Salin satu blok { ... } untuk tiap video.
+     url bisa berupa: link YouTube (termasuk Shorts), link Google Drive,
+     file video di folder yang sama (mis. "video/promo.mp4"),
+     atau link TikTok/Instagram (tampil sebagai tombol "Tonton di ...").
+     vertical: true  -> untuk video tegak (Reels, TikTok, Shorts).
+     Selama daftar ini kosong, bagian Konten Video otomatis disembunyikan. */
+  videos: [
+    // {
+    //   title: "Promo menu baru",
+    //   desc: "Video promosi untuk Instagram kafe.",
+    //   url: "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+    //   vertical: false
+    // },
+    // {
+    //   title: "Reels suasana kafe",
+    //   desc: "Konten harian untuk akun kafe.",
+    //   url: "https://www.instagram.com/reel/XXXXXXXXXXX/",
+    //   vertical: true
+    // }
   ],
 
   skills: [
@@ -50,9 +71,9 @@ const DATA = {
   experience: [
     {
       period: "2026 – sekarang",
-      title: "Grias Property",
-      sub: "Website dan konten digital", // ganti dengan jabatan Anda
-      desc: "Mendukung kebutuhan digital perusahaan properti dan arsitektur."
+      title: "Teman Circle",
+      sub: "Konten Kreator",
+      desc: "Membuat konten visual, foto produk, dan materi promosi untuk media sosial."
     },
     {
       period: "2025 – sekarang",
@@ -67,8 +88,8 @@ const DATA = {
     email: "rifanalaziz24@gmail.com",
     links: [
       { label: "GitHub", url: "https://github.com/" },       // ganti dengan akun Anda
-      { label: "LinkedIn", url: "https://linkedin.com/" },
-      { label: "Instagram", url: "https://instagram.com/" }
+      { label: "LinkedIn", url: "https://linkedin.com/" },   // ganti dengan akun Anda
+      { label: "Instagram", url: "https://www.instagram.com/rifanalazis__/" }
     ]
   }
 };
