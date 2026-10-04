@@ -13,7 +13,6 @@ const DATA = {
 
   about: [
     "Saya mahasiswa DIII Manajemen Informatika yang tertarik pada pengembangan web, pembuatan konten, dan desain visual. Saya suka mengubah ide dan data menjadi tampilan yang bisa dipahami orang dalam sekali lihat.",
-    
 
   projects: [
     {
