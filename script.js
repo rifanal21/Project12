@@ -26,7 +26,8 @@
   $("#about").append(...DATA.about.map((p) => h("p", {}, p)));
 
   $("#projects").append(...DATA.projects.map((p) => {
-    const title = p.link ? h("a", { href: p.link, target: "_blank", rel: "noopener" }, p.title) : p.title;
+    const inner = p.link && p.link.startsWith("#");
+    const title = p.link ? h("a", inner ? { href: p.link } : { href: p.link, target: "_blank", rel: "noopener" }, p.title) : p.title;
     return h("div", { class: "row" },
       h("div", { class: "key" }, p.year),
       h("div", {}, h("h3", {}, title), h("p", {}, p.desc), tags(p.tags)));
@@ -46,6 +47,36 @@
     h("p", { style: "margin-top:1.25rem" }, h("a", { class: "mail", href: "mailto:" + c.email }, c.email)),
     h("div", { class: "social" }, c.links.map((l) => h("a", { href: l.url, target: "_blank", rel: "noopener" }, l.label)))
   );
+
+  // Video: YouTube, Google Drive, file langsung, atau tautan luar
+  function embed(v) {
+    const u = v.url, cls = "frame" + (v.vertical ? " v" : "");
+    const frame = (src) => h("div", { class: cls }, h("iframe", {
+      src, title: v.title, loading: "lazy", allowfullscreen: "",
+      referrerpolicy: "strict-origin-when-cross-origin",
+      allow: "encrypted-media; picture-in-picture; fullscreen"
+    }));
+    let m = u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([\w-]{11})/);
+    if (m) return frame("https://www.youtube-nocookie.com/embed/" + m[1]);
+    m = u.match(/drive\.google\.com\/file\/d\/([\w-]+)/);
+    if (m) return frame("https://drive.google.com/file/d/" + m[1] + "/preview");
+    if (/\.(mp4|webm|mov)(\?|$)/i.test(u)) {
+      const vid = h("video", { controls: "", preload: "metadata", playsinline: "" });
+      vid.src = u;
+      return h("div", { class: cls }, vid);
+    }
+    let host = u;
+    try { host = new URL(u).hostname.replace("www.", ""); } catch (e) {}
+    return h("a", { class: cls + " ext", href: u, target: "_blank", rel: "noopener" }, "Tonton di " + host);
+  }
+  if (DATA.videos && DATA.videos.length && $("#videos")) {
+    $("#videos").append(...DATA.videos.map((v) =>
+      h("figure", { class: "vid" }, embed(v), h("h3", {}, v.title), v.desc ? h("p", { class: "muted" }, v.desc) : "")));
+  } else {
+    const sec = $("#konten"), lnk = document.querySelector('nav a[href="#konten"]');
+    if (sec) sec.remove();
+    if (lnk) lnk.remove();
+  }
 
   // Garis kontur peta (motif SIG), tergambar sekali saat halaman dibuka
   const svg = $("#contours");
