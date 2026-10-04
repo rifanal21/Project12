@@ -30,19 +30,13 @@ const DATA = {
       tags: ["Media Sosial", "Konten Kreator"],
       link: "#konten" // mengarah ke bagian Konten Video di bawah
     },
-    {
-      title: "Latihan Struktur Data dengan Bahasa C",
-      year: "2026",
-      desc: "Implementasi linked list dan operasinya dalam bahasa C, dikerjakan bersama tim.",
-      tags: ["C", "Struktur Data"],
-      link: ""
-    }
+     
   ],
 
   /* Video karya Anda. Salin satu blok { ... } untuk tiap video.
      url bisa berupa: link YouTube (termasuk Shorts), link Google Drive,
-     file video di folder yang sama (mis. "video/promo.mp4"),
-     atau link TikTok/Instagram (tampil sebagai tombol "Tonton di ...").
+     link Reel Instagram, link TikTok, atau file video di folder "video"
+     (mis. "video/promo.mp4").
      vertical: true  -> untuk video tegak (Reels, TikTok, Shorts).
      Selama daftar ini kosong, bagian Konten Video otomatis disembunyikan.
      Ganti nama file di bawah sesuai video Anda di folder "video". */
@@ -51,7 +45,7 @@ const DATA = {
       title: "Video 1",
       desc: "Ganti dengan deskripsi video Anda.",
       url: "video/video1.mp4",
-      vertical: true
+      vertical: false
     },
     {
       title: "Video 2",
