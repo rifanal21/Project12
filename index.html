@@ -13,6 +13,12 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="ld-ring"><span class="ld-orb"></span></div>
+  <p class="ld-name">LOADING</p>
+  <div class="ld-bar"><i id="ldBar"></i></div>
+  <p class="ld-pct"><span id="ldPct">0</span>%</p>
+</div>
 <div class="shell">
   <aside>
     <div>
@@ -36,6 +42,7 @@
       <svg class="contours" id="contours" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
       <div>
         <h1 id="name"></h1>
+        <p class="typed">Saya mengerjakan <span id="typed"></span><i class="caret"></i></p>
         <p class="lead" id="tagline"></p>
         <p class="actions">
           <a class="btn" href="#proyek">Lihat proyek</a>

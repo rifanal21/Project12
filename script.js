@@ -120,11 +120,73 @@
   }, { rootMargin: "-45% 0px -50% 0px" });
   document.querySelectorAll("main section").forEach((s) => io.observe(s));
 
+  // Animasi: teks mengetik, muncul saat scroll, dan bar progres scroll
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const words = DATA.skills.map((s) => s.group), tp = $("#typed");
+  if (tp && words.length) {
+    if (reduced) tp.textContent = words[0];
+    else {
+      let wi = 0, ci = 0, del = false;
+      (function tick() {
+        const w = words[wi];
+        ci += del ? -1 : 1;
+        tp.textContent = w.slice(0, ci);
+        let t = del ? 40 : 90;
+        if (!del && ci === w.length) { del = true; t = 1400; }
+        else if (del && ci === 0) { del = false; wi = (wi + 1) % words.length; t = 300; }
+        setTimeout(tick, t);
+      })();
+    }
+  }
+  if (!reduced) {
+    const ro = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in"); ro.unobserve(e.target); }
+    }), { threshold: 0.12 });
+    document.querySelectorAll("section:not(.hero) h2, .prose, .row, .vid, .mail, .social").forEach((el, i) => {
+      el.classList.add("reveal");
+      el.style.setProperty("--d", (i % 4) * 90 + "ms");
+      ro.observe(el);
+    });
+    const bar = h("div", { class: "progress" });
+    document.body.append(bar);
+    addEventListener("scroll", () => {
+      const m = document.documentElement.scrollHeight - innerHeight;
+      bar.style.transform = "scaleX(" + (m > 0 ? scrollY / m : 0) + ")";
+    }, { passive: true });
+  }
+
+  // Layar loading: hitung 0-100%, lalu buka portofolio
+  const ld = $("#loader");
+  if (ld) {
+    if (reduced) { ld.remove(); document.body.classList.add("ready"); }
+    else {
+      const t0 = performance.now(), MIN = 2000, MAX = 5000;
+      let loaded = document.readyState === "complete", shown = 0;
+      if (!loaded) addEventListener("load", () => (loaded = true));
+      (function step(now) {
+        const el = now - t0;
+        const target = (loaded && el >= MIN) || el >= MAX ? 100 : Math.min(90, (el / MIN) * 90);
+        shown += (target - shown) * 0.1;
+        if (target === 100 && shown > 99.4) shown = 100;
+        $("#ldPct").textContent = Math.round(shown);
+        $("#ldBar").style.transform = "scaleX(" + shown / 100 + ")";
+        if (shown < 100) return requestAnimationFrame(step);
+        setTimeout(() => {
+          ld.classList.add("out");
+          setTimeout(() => document.body.classList.add("ready"), 250);
+          setTimeout(() => ld.remove(), 1100);
+        }, 350);
+      })(t0);
+    }
+  }
+
   // Efek 3D: kartu dan foto miring mengikuti kursor (hanya di perangkat dengan mouse)
   if (!matchMedia("(prefers-reduced-motion: reduce)").matches && matchMedia("(hover: hover)").matches) {
     const tilt = (el, max) => {
       el.addEventListener("pointermove", (e) => {
         const r = el.getBoundingClientRect();
+        el.style.setProperty("--mx", e.clientX - r.left + "px");
+        el.style.setProperty("--my", e.clientY - r.top + "px");
         el.style.setProperty("--ry", ((e.clientX - r.left) / r.width - 0.5) * max + "deg");
         el.style.setProperty("--rx", (-((e.clientY - r.top) / r.height - 0.5)) * max + "deg");
       });
