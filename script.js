@@ -195,4 +195,82 @@
     tilt($("#stage"), 16);
     document.querySelectorAll(".row").forEach((el) => tilt(el, 5));
   }
+
+  // Menu liquid glass: pill kaca bergeser ke menu aktif dan bisa diseret (mouse)
+  const nav = $("nav"), pill = h("span", { class: "glass-pill" });
+  nav.prepend(pill);
+  const items = () => [...nav.querySelectorAll("a")];
+  const active = () => items().find((a) => a.getAttribute("aria-current") === "true") || items()[0];
+  let curX = 0, curW = 0, drag = null, hold = false, idleT, suppress = false;
+  function place(a, anim) {
+    if (!a) return;
+    if (anim !== false) {
+      pill.classList.add("moving");
+      clearTimeout(place.t);
+      place.t = setTimeout(() => pill.classList.remove("moving"), 380);
+    }
+    curX = a.offsetLeft; curW = a.offsetWidth;
+    pill.style.width = curW + "px";
+    pill.style.transform = "translateX(" + curX + "px)";
+    nav.scrollTo({ left: a.offsetLeft - nav.clientWidth / 2 + a.offsetWidth / 2, behavior: "smooth" });
+  }
+  place(active(), false);
+  addEventListener("load", () => place(active(), false));
+  addEventListener("resize", () => place(active(), false));
+  if (document.fonts) document.fonts.ready.then(() => place(active(), false));
+  new MutationObserver(() => { if (!drag && !hold) place(active()); })
+    .observe(nav, { attributes: true, attributeFilter: ["aria-current"], subtree: true });
+
+  // Klik: pill meluncur dulu, penanda aktif ditahan sampai scroll selesai
+  nav.addEventListener("click", (e) => {
+    if (suppress) { e.preventDefault(); e.stopPropagation(); return; }
+    const a = e.target.closest("a");
+    if (!a) return;
+    place(a);
+    hold = true;
+    clearTimeout(idleT);
+    idleT = setTimeout(() => { hold = false; place(active()); }, 1200);
+  }, true);
+  addEventListener("scroll", () => {
+    if (!hold) return;
+    clearTimeout(idleT);
+    idleT = setTimeout(() => { hold = false; place(active()); }, 160);
+  }, { passive: true });
+
+  // Seret: pill mengikuti kursor, lepas = menempel ke menu terdekat lalu pindah ke bagian itu
+  nav.addEventListener("pointerdown", (e) => {
+    if (e.pointerType === "touch" || !e.target.closest("a")) return;
+    drag = { x0: e.clientX, startX: curX, moved: false, id: e.pointerId };
+  });
+  nav.addEventListener("pointermove", (e) => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x0;
+    if (!drag.moved) {
+      if (Math.abs(dx) < 6) return;
+      drag.moved = true;
+      nav.setPointerCapture(drag.id);
+      nav.classList.add("dragging");
+      pill.classList.remove("moving");
+      pill.classList.add("drag");
+    }
+    const ls = items(), last = ls[ls.length - 1];
+    const x = Math.max(ls[0].offsetLeft, Math.min(last.offsetLeft + last.offsetWidth - curW, drag.startX + dx));
+    pill.style.transform = "translateX(" + x + "px)";
+    pill.dataset.x = x;
+  });
+  const release = () => {
+    if (!drag) return;
+    const d = drag; drag = null;
+    pill.classList.remove("drag");
+    nav.classList.remove("dragging");
+    if (!d.moved) return;
+    const cx = parseFloat(pill.dataset.x) + curW / 2;
+    const target = items().reduce((b, a) =>
+      Math.abs(a.offsetLeft + a.offsetWidth / 2 - cx) < Math.abs(b.offsetLeft + b.offsetWidth / 2 - cx) ? a : b);
+    target.click();
+    suppress = true;
+    setTimeout(() => (suppress = false), 120);
+  };
+  nav.addEventListener("pointerup", release);
+  nav.addEventListener("pointercancel", release);
 })();
