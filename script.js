@@ -48,7 +48,7 @@
     h("div", { class: "social" }, c.links.map((l) => h("a", { href: l.url, target: "_blank", rel: "noopener" }, l.label)))
   );
 
-  // Video: YouTube, Google Drive, Instagram, TikTok, file langsung, atau tautan luar
+  // Video: YouTube, Google Drive, file langsung, atau tautan luar
   function embed(v) {
     const u = v.url, cls = "frame" + (v.vertical ? " v" : "");
     const frame = (src, extra) => h("div", { class: cls + (extra || "") }, h("iframe", {
@@ -119,4 +119,18 @@
     });
   }, { rootMargin: "-45% 0px -50% 0px" });
   document.querySelectorAll("main section").forEach((s) => io.observe(s));
+
+  // Efek 3D: kartu dan foto miring mengikuti kursor (hanya di perangkat dengan mouse)
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches && matchMedia("(hover: hover)").matches) {
+    const tilt = (el, max) => {
+      el.addEventListener("pointermove", (e) => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty("--ry", ((e.clientX - r.left) / r.width - 0.5) * max + "deg");
+        el.style.setProperty("--rx", (-((e.clientY - r.top) / r.height - 0.5)) * max + "deg");
+      });
+      el.addEventListener("pointerleave", () => { el.style.setProperty("--rx", "0deg"); el.style.setProperty("--ry", "0deg"); });
+    };
+    tilt($("#stage"), 16);
+    document.querySelectorAll(".row").forEach((el) => tilt(el, 5));
+  }
 })();

@@ -64,7 +64,7 @@ const DATA = {
 
   experience: [
     {
-      period: "2026 – ",
+      period: "2026  ",
       title: "Teman Circle",
       sub: "Konten Kreator",
       desc: "Membuat konten visual, foto produk, dan materi promosi untuk media sosial."
