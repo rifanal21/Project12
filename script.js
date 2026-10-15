@@ -120,6 +120,21 @@
   }, { rootMargin: "-45% 0px -50% 0px" });
   document.querySelectorAll("main section").forEach((s) => io.observe(s));
 
+  // Nama: kata naik satu per satu
+  const nm = $("#name");
+  nm.textContent = "";
+  nm.setAttribute("aria-label", DATA.name);
+  DATA.name.split(" ").forEach((w, i) => nm.append(h("span", { class: "w", "aria-hidden": "true" }, h("span", { style: "--i:" + i }, w)), " "));
+
+  // Pita berjalan dari daftar keahlian, dan angka statistik dari data
+  const mq = $("#mq"), mqItems = DATA.skills.flatMap((s) => s.items);
+  for (let k = 0; k < 2; k++) mqItems.forEach((t) => mq.append(h("span", {}, t), h("i", {}, "\u2726")));
+  const mq2 = $("#mq2");
+  for (let k = 0; k < 2; k++) [...mqItems].reverse().forEach((t) => mq2.append(h("span", {}, t), h("i", {}, "\u2726")));
+  [[DATA.projects.length, "Proyek"], [(DATA.videos || []).length, "Video"], [mqItems.length, "Keahlian"]]
+    .filter((x) => x[0] > 0)
+    .forEach(([n, label]) => $("#stats").append(h("div", { class: "stat" }, h("b", { "data-n": n }, String(n)), h("span", {}, label))));
+
   // Animasi: teks mengetik, muncul saat scroll, dan bar progres scroll
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const words = DATA.skills.map((s) => s.group), tp = $("#typed");
@@ -142,11 +157,22 @@
     const ro = new IntersectionObserver((es) => es.forEach((e) => {
       if (e.isIntersecting) { e.target.classList.add("in"); ro.unobserve(e.target); }
     }), { threshold: 0.12 });
-    document.querySelectorAll("section:not(.hero) h2, .prose, .row, .vid, .mail, .social").forEach((el, i) => {
+    document.querySelectorAll("section:not(.hero) h2, .prose, .row, .vid, .mail, .social, .stat").forEach((el, i) => {
       el.classList.add("reveal");
       el.style.setProperty("--d", (i % 4) * 90 + "ms");
       ro.observe(el);
     });
+    const so = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      so.unobserve(e.target);
+      const n = +e.target.dataset.n, t0 = performance.now();
+      (function f(t) {
+        const k = Math.min(1, (t - t0) / 1300);
+        e.target.textContent = Math.round(n * (1 - Math.pow(1 - k, 3)));
+        if (k < 1) requestAnimationFrame(f);
+      })(t0);
+    }), { threshold: 0.6 });
+    document.querySelectorAll(".stat b").forEach((b) => { b.textContent = "0"; so.observe(b); });
     const bar = h("div", { class: "progress" });
     document.body.append(bar);
     addEventListener("scroll", () => {
@@ -273,4 +299,19 @@
   };
   nav.addEventListener("pointerup", release);
   nav.addEventListener("pointercancel", release);
+
+  // Sorotan latar mengikuti kursor dan tombol magnetis (hanya perangkat dengan mouse)
+  if (!reduced && matchMedia("(hover: hover)").matches) {
+    addEventListener("pointermove", (e) => {
+      document.documentElement.style.setProperty("--sx", e.clientX + "px");
+      document.documentElement.style.setProperty("--sy", e.clientY + "px");
+    }, { passive: true });
+    document.querySelectorAll(".btn, .social a").forEach((el) => {
+      el.addEventListener("pointermove", (e) => {
+        const r = el.getBoundingClientRect();
+        el.style.translate = (e.clientX - r.left - r.width / 2) * 0.3 + "px " + (e.clientY - r.top - r.height / 2) * 0.4 + "px";
+      });
+      el.addEventListener("pointerleave", () => (el.style.translate = ""));
+    });
+  }
 })();

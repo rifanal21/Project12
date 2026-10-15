@@ -169,7 +169,7 @@ body:not(.ready) .actions,body:not(.ready) .stage{animation-play-state:paused}
   animation:failsafe 0s 9s forwards}
 .loader.out{opacity:0;visibility:hidden;transform:translateY(-6%) scale(1.05)}
 .loader>*{animation:up .8s cubic-bezier(.2,.7,.2,1) both}
-.ld-name{animation-delay:.15s;font:500 1rem var(--head);letter-spacing:.35em;color:var(--soft);text-align:center;padding-left:.35em}
+.ld-name{animation-delay:.15s;font:500 1rem var(--head);letter-spacing:.22em;color:var(--soft);text-align:center;padding-left:.22em;max-width:90vw}
 .ld-bar{animation-delay:.25s;width:min(220px,60vw);height:3px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden}
 .ld-bar i{display:block;height:100%;transform-origin:0 0;transform:scaleX(0);
   background:linear-gradient(90deg,var(--blue),#7FD4FF);box-shadow:0 0 12px rgba(80,150,255,.8)}
@@ -182,6 +182,92 @@ body:not(.ready) .actions,body:not(.ready) .stage{animation-play-state:paused}
 .ld-ring::after{inset:14px;background:conic-gradient(transparent 0 60%,rgba(106,169,255,.8));animation:spin 1.9s linear infinite reverse}
 .ld-ring span{width:22px;height:22px;border-radius:50%;animation:pulse 1.4s ease-in-out infinite alternate;
   background:radial-gradient(circle at 35% 30%,#fff,#6AA9FF 45%,#2F6BFF);box-shadow:0 0 28px 6px rgba(63,123,255,.65)}
+
+/* ===== Animasi kekinian ===== */
+@property --ang{syntax:"<angle>";initial-value:0deg;inherits:false}
+@keyframes ang{to{--ang:360deg}}
+@keyframes rise{from{transform:translateY(112%)}}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+/* Nama: kata naik satu per satu */
+.hero h1{animation:none;background:none;-webkit-background-clip:border-box;background-clip:border-box;color:inherit}
+.w{display:inline-block;overflow:hidden;vertical-align:bottom;padding:.1em .04em .14em;margin:-.1em 0 -.14em}
+.w>span{display:inline-block;background:linear-gradient(180deg,#fff 35%,#7FB0FF);-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:rise 1s cubic-bezier(.2,.8,.2,1) calc(.1s + var(--i) * .13s) both}
+body:not(.ready) .w>span{animation-play-state:paused}
+
+/* Cincin cahaya berputar di foto */
+.stage::after{content:"";position:absolute;inset:-4px;border-radius:999px 999px 30px 30px;padding:2px;pointer-events:none;transform:translateZ(1px);
+  background:conic-gradient(from var(--ang),transparent 0 55%,#4F8BFF,#B5DAFF,transparent);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);mask-composite:exclude;animation:ang 6s linear infinite}
+
+/* Pita berjalan */
+.marquee{overflow:hidden;padding:1.1rem 0;border-block:1px solid var(--line);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.mq{display:flex;align-items:center;width:max-content;animation:scroll 32s linear infinite}
+.marquee:hover .mq{animation-play-state:paused}
+.mq span{padding:0 1.3rem;font:700 clamp(1.5rem,3.2vw,2.3rem) var(--head);letter-spacing:-.02em;color:transparent;-webkit-text-stroke:1px rgba(140,180,255,.6);white-space:nowrap}
+.mq i{font-style:normal;color:var(--blue2);font-size:1.1rem}
+
+/* Statistik */
+.stats{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2.5rem}
+.stat{min-width:150px;padding:1.2rem 1.6rem;border-radius:20px;background:var(--glass);border:1px solid var(--line)}
+.stat b{display:block;font:700 2.7rem/1 var(--head);font-variant-numeric:tabular-nums;
+  background:linear-gradient(180deg,#fff,#6AA9FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font:500 .9rem var(--head);color:var(--muted)}
+
+/* Sorotan latar dan kursor cincin */
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(420px circle at var(--sx,50%) var(--sy,30%),rgba(70,130,255,.14),transparent 60%)}
+.btn,.social a{transition:transform .2s,box-shadow .2s,color .2s,border-color .2s,translate .3s cubic-bezier(.2,.8,.2,1)}
+
+/* ===== Tampilan lebih kaya ===== */
+@keyframes wheel{from{background-position:0 0}to{background-position:0 15px}}
+
+/* Tekstur halus di seluruh halaman */
+html::after{content:"";position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.07;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* Penunjuk scroll di hero */
+.hero::after{content:"";position:absolute;left:50%;bottom:1.8rem;width:24px;height:40px;translate:-50% 0;border-radius:14px;
+  border:1.5px solid rgba(255,255,255,.3);background:radial-gradient(circle at 50% 9px,#9CC4FF 3px,transparent 4px) no-repeat;
+  animation:wheel 1.6s ease-in-out infinite}
+
+/* Pita berjalan: dua baris berlawanan arah */
+.mq+.mq{margin-top:.2rem}
+.mq.rev{animation-direction:reverse;animation-duration:38s}
+.mq.rev span{-webkit-text-stroke:0;color:rgba(190,215,255,.85)}
+
+/* Proyek: susunan bento */
+#projects,#skills{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+#projects .row,#skills .row{display:block;margin:0}
+#projects .row:first-child{grid-column:1/-1}
+#projects .row{padding:1.8rem}
+#projects .row h3{font-size:1.5rem;line-height:1.3}
+#projects .row .key{display:inline-block;margin-bottom:.9rem;padding:.1rem .75rem;border-radius:999px;font-size:.85rem;
+  background:rgba(47,107,255,.15);border:1px solid rgba(106,169,255,.3)}
+#skills .row .key{margin-bottom:.8rem;font-size:1.05rem;color:#fff}
+
+/* Pengalaman: garis waktu */
+#experience{position:relative;padding-left:1.8rem}
+#experience::before{content:"";position:absolute;left:5px;top:10px;bottom:10px;width:2px;border-radius:2px;
+  background:linear-gradient(var(--blue),rgba(47,107,255,0))}
+#experience .row::after{content:"";position:absolute;left:-1.8rem;top:2rem;width:12px;height:12px;border-radius:50%;
+  background:var(--blue2);box-shadow:0 0 0 4px rgba(47,107,255,.25),0 0 16px var(--blue)}
+
+/* Video: terangkat saat disorot */
+.vid .frame{transition:transform .35s ease,box-shadow .35s ease}
+.vid:hover .frame{transform:translateY(-6px);box-shadow:0 40px 70px -26px rgba(47,107,255,.85)}
+
+/* Kontak: kartu sambutan bercahaya */
+#contact{position:relative;isolation:isolate;overflow:hidden;padding:2.6rem clamp(1.4rem,4vw,3rem);border-radius:28px;
+  background:var(--glass);border:1px solid var(--line)}
+#contact::before{content:"";position:absolute;z-index:-1;width:420px;height:420px;right:-120px;top:-170px;border-radius:50%;
+  background:rgba(47,107,255,.38);filter:blur(90px);pointer-events:none}
+
+@media (max-width:899px){.hero::after{display:none}}
+@media (max-width:700px){#projects,#skills{grid-template-columns:1fr}}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
