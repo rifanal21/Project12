@@ -154,6 +154,12 @@
     }
   }
   if (!reduced) {
+    document.querySelectorAll("section:not(.hero) h2").forEach((el) => {
+      const words = el.textContent.trim().split(/\s+/);
+      el.setAttribute("aria-label", el.textContent.trim());
+      el.textContent = "";
+      words.forEach((w, i) => el.append(h("span", { class: "hw", "aria-hidden": "true" }, h("span", { style: "--i:" + i }, w)), " "));
+    });
     const ro = new IntersectionObserver((es) => es.forEach((e) => {
       if (e.isIntersecting) { e.target.classList.add("in"); ro.unobserve(e.target); }
     }), { threshold: 0.12 });
@@ -186,7 +192,7 @@
   if (ld) {
     if (reduced) { ld.remove(); document.body.classList.add("ready"); }
     else {
-      const t0 = performance.now(), MIN = 2000, MAX = 5000;
+      const t0 = performance.now(), MIN = 1500, MAX = 5000;
       let loaded = document.readyState === "complete", shown = 0;
       if (!loaded) addEventListener("load", () => (loaded = true));
       (function step(now) {
@@ -218,8 +224,7 @@
       });
       el.addEventListener("pointerleave", () => { el.style.setProperty("--rx", "0deg"); el.style.setProperty("--ry", "0deg"); });
     };
-    tilt($("#stage"), 16);
-    document.querySelectorAll(".row").forEach((el) => tilt(el, 5));
+    document.querySelectorAll(".row").forEach((el) => tilt(el, 2.5));
   }
 
   // Menu liquid glass: pill kaca bergeser ke menu aktif dan bisa diseret (mouse)
@@ -305,13 +310,104 @@
     addEventListener("pointermove", (e) => {
       document.documentElement.style.setProperty("--sx", e.clientX + "px");
       document.documentElement.style.setProperty("--sy", e.clientY + "px");
+      document.documentElement.style.setProperty("--px", (e.clientX / innerWidth - 0.5) * 2);
+      document.documentElement.style.setProperty("--py", (e.clientY / innerHeight - 0.5) * 2);
     }, { passive: true });
     document.querySelectorAll(".btn, .social a").forEach((el) => {
       el.addEventListener("pointermove", (e) => {
         const r = el.getBoundingClientRect();
-        el.style.translate = (e.clientX - r.left - r.width / 2) * 0.3 + "px " + (e.clientY - r.top - r.height / 2) * 0.4 + "px";
+        el.style.translate = (e.clientX - r.left - r.width / 2) * 0.18 + "px " + (e.clientY - r.top - r.height / 2) * 0.24 + "px";
       });
       el.addEventListener("pointerleave", () => (el.style.translate = ""));
     });
+  }
+
+  // Footer dan tombol kembali ke atas
+  $("#foot").append(h("span", {}, "\u00a9 " + new Date().getFullYear() + " " + DATA.name), h("span", {}, "Dibuat dengan HTML, CSS, dan JavaScript"));
+  const up = h("button", { class: "totop", "aria-label": "Kembali ke atas" }, "\u2191");
+  document.body.append(up);
+  up.onclick = () => scrollTo({ top: 0, behavior: "smooth" });
+  addEventListener("scroll", () => up.classList.toggle("show", scrollY > 700), { passive: true });
+
+  // Latar konstelasi: titik-titik biru yang saling terhubung dan mendekat ke kursor
+  if (!reduced) {
+    const cv = h("canvas", { id: "bg" });
+    document.body.prepend(cv);
+    const ctx = cv.getContext("2d");
+    let W, H, pts = [], mx = -999, my = -999;
+    const size = () => {
+      const d = Math.min(devicePixelRatio || 1, 2);
+      W = innerWidth; H = innerHeight;
+      cv.width = W * d; cv.height = H * d;
+      ctx.setTransform(d, 0, 0, d, 0, 0);
+      pts = Array.from({ length: Math.round(Math.min(70, (W * H) / 30000)) }, () => ({
+        x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25
+      }));
+    };
+    size();
+    addEventListener("resize", size);
+    addEventListener("pointermove", (e) => { mx = e.clientX; my = e.clientY; }, { passive: true });
+    const line = (x1, y1, x2, y2, rgb, a) => {
+      ctx.strokeStyle = "rgba(" + rgb + "," + a + ")";
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    };
+    (function draw() {
+      if (!document.hidden) {
+        ctx.clearRect(0, 0, W, H);
+        for (const p of pts) {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > W) p.vx *= -1;
+          if (p.y < 0 || p.y > H) p.vy *= -1;
+        }
+        for (let i = 0; i < pts.length; i++) {
+          const a = pts[i];
+          ctx.fillStyle = "rgba(140,185,255,.4)";
+          ctx.beginPath(); ctx.arc(a.x, a.y, 1.4, 0, 6.283); ctx.fill();
+          for (let k = i + 1; k < pts.length; k++) {
+            const b = pts[k], d = Math.hypot(a.x - b.x, a.y - b.y);
+            if (d < 130) line(a.x, a.y, b.x, b.y, "100,150,255", 0.12 * (1 - d / 130));
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    })();
+  }
+
+  // Lanyard: kartu tergantung, berayun seperti bandul, dan bisa ditarik lalu dilepas
+  const swing = $("#swing"), lan = $("#stage");
+  if (swing && lan) {
+    $("#bName").textContent = DATA.name;
+    $("#bRole").textContent = DATA.role;
+    let a = reduced ? 0 : 14, v = 0, drag = false, last = performance.now(), moved = 0;
+    swing.addEventListener("pointerdown", (e) => {
+      drag = true; v = 0;
+      swing.setPointerCapture(e.pointerId);
+      lan.classList.add("grab");
+    });
+    swing.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const r = lan.getBoundingClientRect();
+      const na = Math.max(-30, Math.min(30, -Math.atan2(e.clientX - (r.left + r.width / 2), e.clientY - r.top) * 57.2958));
+      v = Math.max(-1, Math.min(1, (na - a) * 0.25));
+      a = na;
+      moved = performance.now();
+    });
+    const drop = () => { drag = false; lan.classList.remove("grab"); if (performance.now() - moved > 80) v = 0; };
+    swing.addEventListener("pointerup", drop);
+    swing.addEventListener("pointercancel", drop);
+    (function loop(now) {
+      const dt = Math.min(2.5, (now - last) / 16.67);
+      last = now;
+      if (!reduced && !drag) {
+        if (!document.body.classList.contains("ready")) { a = 14; v = 0; }
+        else {
+          v += (-0.0045 * a + Math.sin(now / 1800) * 0.0025) * dt;
+          v *= Math.pow(0.986, dt);
+          a += v * dt;
+        }
+      }
+      swing.style.transform = "rotate(" + a + "deg)";
+      requestAnimationFrame(loop);
+    })(last);
   }
 })();

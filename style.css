@@ -61,9 +61,9 @@ h1{font-size:clamp(2.8rem,6.4vw,5.2rem);line-height:1.02;font-weight:700;letter-
 .arch span{font:700 4rem var(--head);color:var(--muted)}
 .chip{position:absolute;padding:.5rem 1rem;border-radius:999px;font-size:.9rem;font-weight:600;color:#fff;
   background:rgba(15,23,42,.6);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(130,175,255,.35);
-  box-shadow:0 12px 30px -8px rgba(0,0,0,.6);transform:translateZ(70px);animation:fl 5s ease-in-out infinite alternate}
+  box-shadow:0 12px 30px -8px rgba(0,0,0,.6);transform:translateZ(70px);animation:fl 7s ease-in-out infinite alternate}
 .c1{top:10%;left:-14%}.c2{top:46%;right:-16%;animation-delay:-1.6s}.c3{bottom:10%;left:-8%;animation-delay:-3s}
-@keyframes fl{from{transform:translateZ(70px) translateY(0)}to{transform:translateZ(70px) translateY(-12px)}}
+@keyframes fl{from{transform:translateZ(70px) translateY(0)}to{transform:translateZ(70px) translateY(-6px)}}
 
 .prose{max-width:40rem;color:var(--soft);font-size:1.1rem}
 .prose p+p{margin-top:1.1rem}
@@ -146,7 +146,7 @@ aside{animation:down .8s cubic-bezier(.2,.7,.2,1) both}
   background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(80,140,255,.22),transparent 60%)}
 .row:hover::before{opacity:1}
 
-.reveal{opacity:0;translate:0 30px;filter:blur(6px);
+.reveal{opacity:0;translate:0 20px;filter:blur(4px);
   transition:opacity .8s ease var(--d,0ms),translate .8s cubic-bezier(.2,.7,.2,1) var(--d,0ms),filter .8s ease var(--d,0ms)}
 .reveal.in{opacity:1;translate:0 0;filter:none}
 .row.reveal{transition:opacity .8s ease var(--d,0ms),translate .8s cubic-bezier(.2,.7,.2,1) var(--d,0ms),filter .8s ease var(--d,0ms),transform .18s ease-out,border-color .2s,box-shadow .2s}
@@ -205,7 +205,7 @@ body:not(.ready) .w>span{animation-play-state:paused}
 /* Pita berjalan */
 .marquee{overflow:hidden;padding:1.1rem 0;border-block:1px solid var(--line);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
-.mq{display:flex;align-items:center;width:max-content;animation:scroll 32s linear infinite}
+.mq{display:flex;align-items:center;width:max-content;animation:scroll 46s linear infinite}
 .marquee:hover .mq{animation-play-state:paused}
 .mq span{padding:0 1.3rem;font:700 clamp(1.5rem,3.2vw,2.3rem) var(--head);letter-spacing:-.02em;color:transparent;-webkit-text-stroke:1px rgba(140,180,255,.6);white-space:nowrap}
 .mq i{font-style:normal;color:var(--blue2);font-size:1.1rem}
@@ -219,7 +219,7 @@ body:not(.ready) .w>span{animation-play-state:paused}
 
 /* Sorotan latar dan kursor cincin */
 body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:radial-gradient(420px circle at var(--sx,50%) var(--sy,30%),rgba(70,130,255,.14),transparent 60%)}
+  background:radial-gradient(420px circle at var(--sx,50%) var(--sy,30%),rgba(70,130,255,.09),transparent 60%)}
 .btn,.social a{transition:transform .2s,box-shadow .2s,color .2s,border-color .2s,translate .3s cubic-bezier(.2,.8,.2,1)}
 
 /* ===== Tampilan lebih kaya ===== */
@@ -236,7 +236,7 @@ html::after{content:"";position:fixed;inset:0;z-index:50;pointer-events:none;opa
 
 /* Pita berjalan: dua baris berlawanan arah */
 .mq+.mq{margin-top:.2rem}
-.mq.rev{animation-direction:reverse;animation-duration:38s}
+.mq.rev{animation-direction:reverse;animation-duration:54s}
 .mq.rev span{-webkit-text-stroke:0;color:rgba(190,215,255,.85)}
 
 /* Proyek: susunan bento */
@@ -268,6 +268,72 @@ html::after{content:"";position:fixed;inset:0;z-index:50;pointer-events:none;opa
 
 @media (max-width:899px){.hero::after{display:none}}
 @media (max-width:700px){#projects,#skills{grid-template-columns:1fr}}
+
+/* ===== Poles akhir ===== */
+::selection{background:rgba(47,107,255,.55);color:#fff}
+html{scrollbar-color:#2F4F9F transparent;scrollbar-width:thin}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+
+/* Garis kontur bergeser halus mengikuti mouse */
+.contours{translate:calc(var(--px,0) * -10px) calc(var(--py,0) * -6px)}
+
+/* Kartu proyek dan keahlian: bingkai cahaya berputar saat disorot */
+#projects .row::after,#skills .row::after{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;pointer-events:none;opacity:0;
+  transition:opacity .3s;background:conic-gradient(from var(--ang),transparent 0 50%,#4F8BFF,#B5DAFF,transparent);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);mask-composite:exclude;animation:ang 5s linear infinite}
+#projects .row:hover::after,#skills .row:hover::after{opacity:1}
+
+/* Footer dan tombol kembali ke atas */
+.foot{max-width:72rem;margin:0 auto;padding:2rem clamp(1.25rem,5vw,3rem) 3rem;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;color:var(--muted);font:500 .9rem var(--head)}
+.totop{position:fixed;right:1.2rem;bottom:1.2rem;z-index:20;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(10,14,26,.7);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:#fff;font-size:1.2rem;cursor:pointer;
+  opacity:0;translate:0 14px;pointer-events:none;transition:opacity .3s,translate .3s,border-color .2s,background .2s}
+.totop.show{opacity:1;translate:0 0;pointer-events:auto}
+.totop:hover{border-color:var(--blue2);background:rgba(47,107,255,.25)}
+
+/* ===== Gerak halus ===== */
+@keyframes curtain{from{clip-path:inset(100% 0 0 0);scale:1.15}to{clip-path:inset(0);scale:1}}
+.arch img{animation:curtain 1.3s cubic-bezier(.7,0,.2,1) .35s both}
+body:not(.ready) .arch img{animation-play-state:paused}
+h2.reveal{opacity:1;translate:0 0;filter:none}
+.hw{display:inline-block;overflow:hidden;vertical-align:bottom;padding:.1em .03em .16em;margin:-.1em 0 -.16em}
+.hw>span{display:inline-block;transform:translateY(115%);transition:transform .9s cubic-bezier(.2,.8,.2,1) calc(var(--i) * .08s)}
+h2.in .hw>span{transform:none}
+@supports (animation-timeline:scroll()){
+  @keyframes heroOut{to{opacity:0;translate:0 -50px;filter:blur(4px)}}
+  .hero>div:nth-of-type(1){animation:heroOut linear both;animation-timeline:scroll(root);animation-range:0 55vh}
+}
+
+/* ===== Lanyard: kartu foto tergantung ===== */
+@keyframes sheen{0%,55%{translate:-130% 0}100%{translate:130% 0}}
+.lanyard{position:relative;width:min(300px,100%);justify-self:center;animation:up 1.1s cubic-bezier(.2,.7,.2,1) .3s both}
+body:not(.ready) .lanyard{animation-play-state:paused}
+.lanyard::before{content:"";position:absolute;inset:25% -18% 0;border-radius:50%;background:rgba(47,107,255,.32);filter:blur(80px);z-index:-1}
+.strap{position:absolute;left:50%;bottom:100%;width:26px;height:80vh;transform-origin:50% 100%;border-radius:2px;
+  background:repeating-linear-gradient(180deg,transparent 0 18px,rgba(255,255,255,.1) 18px 20px),linear-gradient(90deg,#1b46c4,#3F7BFF 50%,#1b46c4);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 0 24px -6px rgba(47,107,255,.6)}
+.strap.l{transform:translateX(-50%) rotate(-7deg)}
+.strap.r{transform:translateX(-50%) rotate(7deg)}
+.swing{position:relative;transform-origin:50% 0;touch-action:pan-y;will-change:transform}
+.clip{position:absolute;left:50%;top:-10px;width:34px;height:48px;translate:-50% 0;z-index:2;border-radius:8px 8px 14px 14px;
+  background:linear-gradient(90deg,#9fb0cf,#eef3ff 45%,#8798ba);box-shadow:0 4px 10px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.7)}
+.clip::after{content:"";position:absolute;left:50%;bottom:-15px;width:16px;height:24px;translate:-50% 0;border:3px solid #b7c4df;border-radius:50%}
+.badge{position:relative;overflow:hidden;margin-top:34px;padding:14px 14px 18px;border-radius:26px;cursor:grab;
+  background:linear-gradient(160deg,rgba(38,58,112,.92),rgba(9,15,33,.96));border:1px solid rgba(130,175,255,.38);
+  box-shadow:0 44px 70px -28px rgba(0,0,0,.9),0 0 60px -16px rgba(47,107,255,.55),inset 0 1px 0 rgba(255,255,255,.25)}
+.badge::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.16) 50%,transparent 62%);
+  animation:sheen 7s ease-in-out infinite}
+.grab .badge{cursor:grabbing}
+.slot{width:48px;height:9px;margin:2px auto 12px;border-radius:9px;background:#05070D;box-shadow:inset 0 1px 2px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.12)}
+.badge .arch{aspect-ratio:1/1.1;border-radius:18px;border:1px solid rgba(255,255,255,.16);box-shadow:none}
+.badge .arch img{object-position:50% 16%}
+.b-name{margin-top:14px;font:700 1.1rem/1.25 var(--head);letter-spacing:-.01em;color:#fff}
+.b-role{font:500 .85rem var(--head);color:var(--muted)}
+.b-bar{height:14px;margin-top:14px;border-radius:2px;opacity:.45;
+  background:repeating-linear-gradient(90deg,#fff 0 2px,transparent 2px 4px,#fff 4px 5px,transparent 5px 9px)}
+@media (max-width:899px){.lanyard{order:-1;width:250px}}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
